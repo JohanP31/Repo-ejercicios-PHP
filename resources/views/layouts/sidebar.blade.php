@@ -23,6 +23,13 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('tips.*') ? '' : 'collapsed' }}" href="{{ route('tips.index') }}">
+                <i class="bi bi-cash-coin"></i>
+                <span>Calculadora de propinas</span>
+            </a>
+        </li>
+
     </ul>
 
 </aside>
