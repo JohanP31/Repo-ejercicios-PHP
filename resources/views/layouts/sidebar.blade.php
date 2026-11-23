@@ -44,6 +44,13 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('reservations.*') ? '' : 'collapsed' }}" href="{{ route('reservations.index') }}">
+                <i class="bi bi-calendar-check"></i>
+                <span>Reservar cita</span>
+            </a>
+        </li>
+
     </ul>
 
 </aside>

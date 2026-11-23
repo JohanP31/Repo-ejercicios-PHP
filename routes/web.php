@@ -11,3 +11,4 @@ include 'web/tasks.php';
 include 'web/tips.php';
 include 'web/passwords.php';
 include 'web/expenses.php';
+include 'web/reservations.php';
