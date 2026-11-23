@@ -37,6 +37,13 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('expenses.*') ? '' : 'collapsed' }}" href="{{ route('expenses.index') }}">
+                <i class="bi bi-wallet2"></i>
+                <span>Gestor de gastos</span>
+            </a>
+        </li>
+
     </ul>
 
 </aside>
