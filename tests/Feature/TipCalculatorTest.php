@@ -6,7 +6,7 @@ use Tests\TestCase;
 
 class TipCalculatorTest extends TestCase
 {
-    public function test_tip_calculator_is_available_without_authentication(): void
+    public function test_tip_calculator_public(): void
     {
         $this->get(route('tips.index'))
             ->assertOk()

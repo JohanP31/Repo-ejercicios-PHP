@@ -10,14 +10,14 @@ class TaskListTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_task_list_is_available_without_authentication(): void
+    public function test_task_list_public(): void
     {
         $this->get(route('tasks.index'))
             ->assertOk()
             ->assertSee('Lista de tareas');
     }
 
-    public function test_guest_can_create_complete_and_delete_a_task(): void
+    public function test_task_crud(): void
     {
         $this->post(route('tasks.store'), ['title' => 'Leer'])
             ->assertRedirect(route('tasks.index'));
@@ -36,7 +36,7 @@ class TaskListTest extends TestCase
         $this->assertDatabaseMissing('tasks', ['id' => $task->id]);
     }
 
-    public function test_task_title_is_required(): void
+    public function test_task_validation(): void
     {
         $this->from(route('tasks.index'))
             ->post(route('tasks.store'), ['title' => ''])
