@@ -13,7 +13,7 @@ class ReservationSystemTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guest_is_redirected_to_login_from_reservations(): void
+    public function test_reservation_login(): void
     {
         $this->get(route('reservations.index'))
             ->assertRedirect(route('login'));
@@ -22,10 +22,10 @@ class ReservationSystemTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
-    public function test_authenticated_non_admin_can_view_weekday_availability(): void
+    public function test_reservation_slots(): void
     {
         $this->travelTo(Carbon::parse('2026-11-20 08:00:00'));
-        $user = $this->createUserWithRole('Content Manager');
+        $user = $this->createUser('Content Manager');
 
         $this->actingAs($user)
             ->get(route('reservations.index', ['date' => '2026-11-23']))
@@ -38,11 +38,11 @@ class ReservationSystemTest extends TestCase
             ->assertDontSee('value="17:00"', false);
     }
 
-    public function test_booking_is_confirmed_and_the_slot_is_hidden_from_other_users(): void
+    public function test_reservation_booking(): void
     {
         $this->travelTo(Carbon::parse('2026-11-20 08:00:00'));
-        $user = $this->createUserWithRole('Content Manager');
-        $otherUser = $this->createUserWithRole('Administrador');
+        $user = $this->createUser('Content Manager');
+        $otherUser = $this->createUser('Administrador');
 
         $this->actingAs($user)
             ->post(route('reservations.store'), [
@@ -68,11 +68,11 @@ class ReservationSystemTest extends TestCase
             ->assertSee('Todavía no tienes reservas próximas.');
     }
 
-    public function test_a_reserved_slot_cannot_be_booked_twice(): void
+    public function test_reservation_conflict(): void
     {
         $this->travelTo(Carbon::parse('2026-11-20 08:00:00'));
-        $firstUser = $this->createUserWithRole('Content Manager');
-        $secondUser = $this->createUserWithRole('Content Manager');
+        $firstUser = $this->createUser('Content Manager');
+        $secondUser = $this->createUser('Content Manager');
         $slot = '2026-11-23 09:30:00';
 
         Reservation::query()->create([
@@ -98,10 +98,10 @@ class ReservationSystemTest extends TestCase
         ]);
     }
 
-    public function test_booking_rejects_weekends_invalid_hours_past_times_and_services(): void
+    public function test_reservation_validation(): void
     {
         $this->travelTo(Carbon::parse('2026-11-23 10:00:00'));
-        $user = $this->createUserWithRole('Content Manager');
+        $user = $this->createUser('Content Manager');
         $this->actingAs($user);
 
         $this->from(route('reservations.index'))
@@ -147,7 +147,7 @@ class ReservationSystemTest extends TestCase
         $this->assertDatabaseCount('reservations', 0);
     }
 
-    private function createUserWithRole(string $roleName): User
+    private function createUser(string $roleName): User
     {
         $role = new Role;
         $role->name = $roleName;

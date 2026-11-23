@@ -6,7 +6,7 @@ use Tests\TestCase;
 
 class PasswordGeneratorTest extends TestCase
 {
-    public function test_password_generator_is_available_without_authentication(): void
+    public function test_password_generator_public(): void
     {
         $this->get(route('passwords.index'))
             ->assertOk()

@@ -51,6 +51,13 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('notes.*') ? '' : 'collapsed' }}" href="{{ route('notes.index') }}">
+                <i class="bi bi-journal-text"></i>
+                <span>Gestor de notas</span>
+            </a>
+        </li>
+
     </ul>
 
 </aside>

@@ -12,7 +12,7 @@ class ExpenseManagerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_guest_is_redirected_to_login_from_expense_manager(): void
+    public function test_guest_cannot_access_expenses(): void
     {
         $this->get(route('expenses.index'))
             ->assertRedirect(route('login'));
@@ -21,9 +21,9 @@ class ExpenseManagerTest extends TestCase
             ->assertRedirect(route('login'));
     }
 
-    public function test_authenticated_non_admin_can_register_expenses_and_view_monthly_totals(): void
+    public function test_expense_monthly_summary(): void
     {
-        $user = $this->createUserWithRole('Content Manager');
+        $user = $this->createUser('Content Manager');
 
         $this->actingAs($user)
             ->post(route('expenses.store'), [
@@ -65,10 +65,10 @@ class ExpenseManagerTest extends TestCase
             ->assertDontSee('Gasto del mes anterior');
     }
 
-    public function test_user_cannot_view_or_delete_another_users_expense(): void
+    public function test_expense_isolation(): void
     {
-        $owner = $this->createUserWithRole('Administrador');
-        $otherUser = $this->createUserWithRole('Content Manager');
+        $owner = $this->createUser('Administrador');
+        $otherUser = $this->createUser('Content Manager');
         $expense = $owner->expenses()->create([
             'description' => 'Gasto privado',
             'amount' => '50.00',
@@ -87,9 +87,9 @@ class ExpenseManagerTest extends TestCase
         $this->assertDatabaseHas('expenses', ['id' => $expense->id, 'user_id' => $owner->id]);
     }
 
-    public function test_user_can_delete_their_own_expense(): void
+    public function test_expense_delete(): void
     {
-        $user = $this->createUserWithRole('Content Manager');
+        $user = $this->createUser('Content Manager');
         $expense = $user->expenses()->create([
             'description' => 'Gasto para eliminar',
             'amount' => '15.00',
@@ -104,9 +104,9 @@ class ExpenseManagerTest extends TestCase
         $this->assertDatabaseMissing('expenses', ['id' => $expense->id]);
     }
 
-    public function test_expense_description_is_escaped_in_the_monthly_list(): void
+    public function test_expense_escaping(): void
     {
-        $user = $this->createUserWithRole('Content Manager');
+        $user = $this->createUser('Content Manager');
         $description = "<script>alert('xss')</script>";
 
         $this->actingAs($user)
@@ -124,18 +124,18 @@ class ExpenseManagerTest extends TestCase
             ->assertDontSee($description, false);
     }
 
-    public function test_month_filter_rejects_an_invalid_month(): void
+    public function test_month_validation(): void
     {
-        $user = $this->createUserWithRole('Content Manager');
+        $user = $this->createUser('Content Manager');
 
         $this->actingAs($user)
             ->get(route('expenses.index', ['month' => '2026-99']))
             ->assertSessionHasErrors('month');
     }
 
-    public function test_expense_requires_a_positive_amount_valid_category_and_non_future_date(): void
+    public function test_expense_validation(): void
     {
-        $user = $this->createUserWithRole('Content Manager');
+        $user = $this->createUser('Content Manager');
         $this->travelTo(Carbon::parse('2026-11-22 12:00:00'));
 
         $this->actingAs($user)
@@ -152,7 +152,7 @@ class ExpenseManagerTest extends TestCase
         $this->assertDatabaseCount('expenses', 0);
     }
 
-    private function createUserWithRole(string $roleName): User
+    private function createUser(string $roleName): User
     {
         $role = new Role;
         $role->name = $roleName;
