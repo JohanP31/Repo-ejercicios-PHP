@@ -30,6 +30,13 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('passwords.*') ? '' : 'collapsed' }}" href="{{ route('passwords.index') }}">
+                <i class="bi bi-shield-lock"></i>
+                <span>Generador de contraseñas</span>
+            </a>
+        </li>
+
     </ul>
 
 </aside>
