@@ -9,3 +9,4 @@ include('auth.php');
 include('web/sections.php');
 include('web/tasks.php');
 include('web/tips.php');
+include('web/passwords.php');
