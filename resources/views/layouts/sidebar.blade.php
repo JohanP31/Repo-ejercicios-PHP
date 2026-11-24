@@ -58,6 +58,15 @@
             </a>
         </li>
 
+        @auth
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('calendar.*') ? '' : 'collapsed' }}" href="{{ route('calendar.index') }}">
+                    <i class="bi bi-calendar3"></i>
+                    <span>Calendario de eventos</span>
+                </a>
+            </li>
+        @endauth
+
     </ul>
 
 </aside>
