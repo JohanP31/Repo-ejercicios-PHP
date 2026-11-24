@@ -14,3 +14,5 @@ include 'web/expenses.php';
 include 'web/reservations.php';
 include 'web/notes.php';
 include 'web/calendar.php';
+include 'web/recipes.php';
+include 'web/stopwatch.php';

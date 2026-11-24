@@ -58,6 +58,35 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('recipes.*') ? '' : 'collapsed' }}" href="{{ route('recipes.index') }}">
+                <i class="bi bi-book"></i>
+                <span>Plataforma de recetas</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('stopwatch.*') ? '' : 'collapsed' }}" href="{{ route('stopwatch.index') }}">
+                <i class="bi bi-stopwatch"></i>
+                <span>Cronómetro</span>
+            </a>
+        </li>
+
+        @auth
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('recipes.mine') ? '' : 'collapsed' }}" href="{{ route('recipes.mine') }}">
+                    <i class="bi bi-journal-bookmark"></i>
+                    <span>Mis recetas</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('recipes.favorites') ? '' : 'collapsed' }}" href="{{ route('recipes.favorites') }}">
+                    <i class="bi bi-heart"></i>
+                    <span>Recetas favoritas</span>
+                </a>
+            </li>
+        @endauth
+
         @auth
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('calendar.*') ? '' : 'collapsed' }}" href="{{ route('calendar.index') }}">

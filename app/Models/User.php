@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -23,9 +24,19 @@ class User extends Authenticatable
         return $this->hasMany(CalendarEvent::class);
     }
 
+    public function favoriteRecipes(): BelongsToMany
+    {
+        return $this->belongsToMany(Recipe::class)->withTimestamps();
+    }
+
     public function expenses(): HasMany
     {
         return $this->hasMany(Expense::class);
+    }
+
+    public function recipes(): HasMany
+    {
+        return $this->hasMany(Recipe::class);
     }
 
     public function reservations(): HasMany
